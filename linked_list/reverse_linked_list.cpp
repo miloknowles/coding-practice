@@ -27,7 +27,7 @@ ListNode* buildLinkedList(std::vector<int> v) {
 		current->next = new ListNode(i);
 		current = current->next;
 	}
-	return head;
+	return head->next;
 }
 
 void printLinkedList(ListNode *head) {
