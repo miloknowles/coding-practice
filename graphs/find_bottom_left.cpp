@@ -1,5 +1,5 @@
 /*
-Given a non-empty binary search tree, find the leftmost element in the bottom layer:
+Given a non-empty binary tree, find the leftmost element in the bottom layer:
 Approach: Do BFS, add right children before left children. Return the final element in the queue.
 */
 
