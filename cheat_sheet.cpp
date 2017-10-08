@@ -5,10 +5,10 @@
 
 int main(int argc, char const *argv[]) {
 
-	// IO stuff
+	/* IO */
 	std::cout << "My name is milo" << std::endl;
 
-	// Vectors: compile with -std=c++11
+	/* Vectors: compile with -std=c++11 */
 	std::vector<int> vect = {1, 2, 3, 4, 5, 6, 7, 8};
 	vect.push_back(9);
 	vect.pop_back();
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[]) {
 		std::cout << *it << std::endl;
 	}
 
-	// Hashing
+	/* Hashing */
 	std::unordered_map<int, int> m;
 	m[1] = 10;
 	m[2] = 20;
@@ -38,6 +38,20 @@ int main(int argc, char const *argv[]) {
 	for (std::unordered_map<int, int>::iterator it = m.begin(); it != m.end(); ++it) {
 		std::cout << "Key: " << it->first << " Value: " << m[it->first] << std::endl;
 	}
+	m.clear(); // Destroys all items in the map
+
+	/* String: zero-indexed */
+	std::string s = "My name is milo";
+
+	// replacing a single char
+	s[11] = 'x'; // must use single quotes for char
+	std::cout << s << std::endl;
+
+	std::string repl = s; // copy
+
+	// Replace(start_index, length, string_to_insert)
+	repl.replace(11, 4, "sdf;lkksdflkj");
+	std::cout << repl << std::endl;
 
 	return 0;
 }
