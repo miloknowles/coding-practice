@@ -1,6 +1,28 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
+#include <stdio.h>
+
+/* TEMPLATE FUNCTIONS */
+template <class T>
+void printVect(std::vector<T> v) {
+	for (T vi : v) {
+		std::cout << vi << " ";
+	}
+	std::cout << std::endl;
+}
+
+/* DYNAMIC PROGRAMMING */
+// When you need to hash something to a memo, stringify
+
+// Ex: the making change subproblem
+std::string stringify(long n, std::vector<long> v) {
+	std::string s = std::to_string(n) + ".";
+	for (long vi : v) {
+		s += std::to_string(vi);
+	}
+	return s;
+}
 
 
 int main(int argc, char const *argv[]) {
@@ -8,7 +30,7 @@ int main(int argc, char const *argv[]) {
 	/* IO */
 	std::cout << "My name is milo" << std::endl;
 
-	/* Vectors: compile with -std=c++11 */
+	/* VECTORS: compile with -std=c++11 */
 	std::vector<int> vect = {1, 2, 3, 4, 5, 6, 7, 8};
 	vect.push_back(9);
 	vect.pop_back();
@@ -23,7 +45,7 @@ int main(int argc, char const *argv[]) {
 		std::cout << *it << std::endl;
 	}
 
-	/* Hashing */
+	/* HASHING */
 	std::unordered_map<int, int> m;
 	m[1] = 10;
 	m[2] = 20;
@@ -55,5 +77,3 @@ int main(int argc, char const *argv[]) {
 
 	return 0;
 }
-
-
