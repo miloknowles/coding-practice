@@ -1,3 +1,5 @@
+# Checks whether a BST is valid.
+
 class BinaryTreeNode:
 
     def __init__(self, value):
