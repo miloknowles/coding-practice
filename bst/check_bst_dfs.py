@@ -1,7 +1,7 @@
 # Checks whether a BST is valid.
+# Takes a DFS approach.
 
 class BinaryTreeNode:
-
     def __init__(self, value):
         self.value = value
         self.left  = None
