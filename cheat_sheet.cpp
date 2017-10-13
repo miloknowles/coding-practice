@@ -24,7 +24,6 @@ std::string stringify(long n, std::vector<long> v) {
 	return s;
 }
 
-
 int main(int argc, char const *argv[]) {
 
 	/* IO */
@@ -60,6 +59,12 @@ int main(int argc, char const *argv[]) {
 	for (std::unordered_map<int, int>::iterator it = m.begin(); it != m.end(); ++it) {
 		std::cout << "Key: " << it->first << " Value: " << m[it->first] << std::endl;
 	}
+
+	// Iterating through pairs
+	for (std::pair<int, int> p : m) {
+		std::cout << p.first << " " << p.second << std::endl;
+	}
+
 	m.clear(); // Destroys all items in the map
 
 	/* String: zero-indexed */
