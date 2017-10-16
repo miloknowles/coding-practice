@@ -11,7 +11,7 @@ def detectCycle(head):
   :rtype: ListNode
   """
   if head == None:
-      return None
+    return None
   
   slow = head
   fast = head
