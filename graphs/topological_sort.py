@@ -48,6 +48,7 @@ def topological_sort(graph):
 			return False
 		else:
 			dependencies = graph.get_adjacent(v)
+			if v in unvisited: unvisited.remove(v)
 			inprogress.add(v)
 			for d in dependencies:
 				acyclic = visit(d)
