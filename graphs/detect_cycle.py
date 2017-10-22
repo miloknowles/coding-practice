@@ -4,6 +4,7 @@ Detect a cycle in a directed graph.
 Idea: recursively visit nodes and keep track of whether they are
 unvisited, in progress (descendants being explored), or complete (all descendents visited)
 """
+
 import sys
 sys.setrecursionlimit(10000)
 
