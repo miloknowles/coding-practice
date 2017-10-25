@@ -80,5 +80,11 @@ int main(int argc, char const *argv[]) {
 	repl.replace(11, 4, "sdf;lkksdflkj");
 	std::cout << repl << std::endl;
 
+	// Testing vector slice
+	std::vector<std::string> strs = {"a", "b", "c"};
+
+	std::vector<std::string> v1(&strs[0], &strs[1+1]);
+	printVect(v1);
+
 	return 0;
 }

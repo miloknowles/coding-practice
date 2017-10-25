@@ -75,5 +75,8 @@ int main(int argc, char const *argv[])
 	incomp.insert(0, "f");
 	std::cout << incomp << std::endl;
 
+	std::string str = "slfkjadlfkj";
+	std::cout << str.size() << std::endl;
+
 	return 0;
 }
