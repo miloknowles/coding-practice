@@ -86,5 +86,10 @@ int main(int argc, char const *argv[]) {
 	std::vector<std::string> v1(&strs[0], &strs[1+1]);
 	printVect(v1);
 
+	// Make a 2D array
+	int array[2][10];
+	array[0][0] = 1000;
+	std::cout << array[0][0] << std::endl;
+
 	return 0;
 }
