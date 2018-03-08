@@ -1,3 +1,11 @@
+/* Given a starting sequence of DNA, an ending sequence, and a list of valid mutations,
+    determine if there is valid way to mutate the start sequence into the end sequence
+    by changing one character at a time. All intermediate mutations must be in the list
+    of valid mutations.
+
+    -Assume that all sequences of DNA have the same length
+*/
+
 struct LightGraph {
     unordered_map<string, vector<string>> adjacent;
     

@@ -1,6 +1,9 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
+#include <stack>
+#include <queue>
 #include <stdio.h>
 
 /* TEMPLATE FUNCTIONS */
@@ -90,6 +93,40 @@ int main(int argc, char const *argv[]) {
 	int array[2][10];
 	array[0][0] = 1000;
 	std::cout << array[0][0] << std::endl;
+
+	// Trying out some standard libs
+	std::stack<int> stack;
+	stack.push(10);
+	stack.top();
+	stack.pop();
+
+	std::queue<int> queue;
+	queue.push(10);
+	queue.push(20);
+	queue.front();
+	queue.pop();
+	queue.back();
+
+	std::unordered_map<int, std::string> umap;
+	umap[5] = "five";
+	std::string lookup = umap[5];
+	std::cout << lookup << std::endl;
+
+	if (umap.find(5) != umap.end()) {
+		std::cout << umap[5] << std::endl;
+	}
+
+	std::unordered_set<std::string> uset;
+	uset.insert("magnus");
+	uset.insert("diabetes");
+
+	for (auto key : uset) {
+		std::cout << key << std::endl;
+	}
+
+	if (uset.find("windows98") != uset.end()) {
+		std::cout << "Found windows98" << std::endl;
+	} else {std::cout << "not found" << std::endl; }
 
 	return 0;
 }
