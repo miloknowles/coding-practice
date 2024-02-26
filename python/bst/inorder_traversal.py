@@ -1,61 +1,73 @@
-# Traverse a BST in order.
-"""
-Recursive Idea: inorderTraversal(node.left) + node + inorderTraversal(node.right)
-
-Tree Walk Idea:
-- store a stack while going left
-- if you can't go left any more, add top stack node to solution, then go right
-"""
-
-# Definition for a binary tree node.
-class TreeNode(object):
-  def __init__(self, x):
-    self.val = x
-    self.left = None
-    self.right = None
+from dataclasses import dataclass
+from typing import Optional
 
 
-class SolutionRecursive(object):
-  def inorderTraversal(self, root):
-    """
-    :type root: TreeNode
-    :rtype: List[int]
-    """
-    # Base case
-    if (root == None):
-      return []
-    elif (root.left == None and root.right == None):
-      return [root.val]
+@dataclass
+class Node:
+  value: float | int | None
+  left: Optional['Node'] = None
+  right: Optional['Node'] = None
+
+
+def insert(root: Node, value: float | int):
+  """Insert `value` into the binary search tree rooted at `root`."""
+  if root.value is None:
+    root.value = value
+  else:
+    # Should go in the right subtree
+    if value >= root.value:
+      if root.right is None:
+        root.right = Node(value=value, left=None, right=None)
+      else:
+        insert(root.right, value)
+
+    # Should go in the left subtree
     else:
-      result = []
-      if (root.left != None):
-        result.extend(self.inorderTraversal(root.left))
-      result.append(root.val)
-      if (root.right != None):
-        result.extend(self.inorderTraversal(root.right))
-      return result
+      if root.left is None:
+        root.left = Node(value=value, left=None, right=None)
+      else:
+        insert(root.left, value)
 
-class SolutionWalk(object):
-	def inorderTraversal(self, root):
-		"""
-    :type root: TreeNode
-    :rtype: List[int]
-    """
-    stack = []
-    solution = []
 
-    current = root
-    while (len(stack) != 0 or current != None):
+def build_tree(values: list[int | float]) -> Node:
+  """Builds a tree with values and returns the root node."""
+  root = Node(value=None, left=None, right=None)
+  for v in values:
+    insert(root, v)
+  return root
 
-    	# Go left as far as possible
-    	if (current != None):
-    		stack.append(current)
-    		current = current.left
 
-    	# If no more lefts possible, add top node to solution and go right
-    	else:
-    		current = stack.pop()
-    		solution.append(current.val)
-    		current = current.right
+def inorder_traversal_stack(root: Node) -> list[int | float]:
+  values = []
 
-    return solution
+  stack = []
+  current_node = root
+
+  while len(stack) > 0 or current_node is not None:
+    if current_node is not None:
+      stack.append(current_node)
+      current_node = current_node.left
+
+    # If we can't go left any further, add the parent value (top of the stack)
+    # and then go to the right subtree.
+    else:
+      parent = stack.pop()
+      values.append(parent.value)
+      current_node = parent.right
+
+  return values
+
+
+def inorder_traversal_recursive(root: Node) -> list[int | float]:
+  if root is None:
+    return []
+  return (
+    inorder_traversal_recursive(root.left) + \
+    [root.value] + \
+    inorder_traversal_recursive(root.right)
+  )
+
+
+root = build_tree([i for i in range(100)])
+# print(inorder_traversal_stack(root))
+print(inorder_traversal_recursive(root))
