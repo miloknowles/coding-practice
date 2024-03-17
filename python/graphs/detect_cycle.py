@@ -8,6 +8,7 @@ unvisited, in progress (descendants being explored), or complete (all descendent
 import sys
 sys.setrecursionlimit(10000)
 
+
 class Graph(object):
 	def __init__(self):
 		self.vertices = {}
@@ -32,6 +33,7 @@ class Graph(object):
 
 	def get_vertices(self):
 		return self.vertices.keys()
+
 
 def detect_cycles(graph):
 	unvisited = set(graph.get_vertices())
@@ -63,7 +65,7 @@ def detect_cycles(graph):
 	return False
 
 # Example with a cycle
-print 'Example: has cycle'
+print('Example: has cycle')
 g = Graph()
 [g.add_vertex(i) for i in range(6)]
 g.add_edge(0, 1)
@@ -73,13 +75,13 @@ g.add_edge(3, 4)
 g.add_edge(4, 2)
 
 result = detect_cycles(g)
-print 'Result:', result
+print('Result:', result)
 
 # Example without a cycle
-print 'Example: has no cycle'
+print('Example: has no cycle')
 g = Graph()
 [g.add_vertex(i) for i in range(1000)]
 for ii in range(999):
 	g.add_edge(ii, ii+1)
 result = detect_cycles(g)
-print 'Result:', result
+print('Result:', result)
