@@ -24,6 +24,7 @@ class Graph(object):
 	def get_vertices(self):
 		return self.vertices.keys()
 
+
 def topological_sort(graph):
 	"""
 	Return a topological sort of a graph if it is a DAG,
@@ -68,39 +69,3 @@ def topological_sort(graph):
 		if not acyclic: return None
 
 	return sort
-
-# Examples
-
-# 1. Example that IS a DAG
-print 'Example 1: has a solution'
-g = Graph()
-[g.add_vertex(i) for i in range(6)]
-g.add_edge(0, 1)
-g.add_edge(1, 2)
-g.add_edge(2, 3)
-g.add_edge(3, 5)
-g.add_edge(1, 4)
-g.add_edge(4, 5)
-
-topo_sort = topological_sort(g)
-print 'Topological Sort:', topo_sort
-
-# 2. Example with a cycle
-print 'Example 2: no solution'
-g = Graph()
-[g.add_vertex(i) for i in range(6)]
-g.add_edge(0, 1)
-g.add_edge(1, 2)
-g.add_edge(2, 3)
-g.add_edge(3, 4)
-g.add_edge(4, 2)
-
-topo_sort = topological_sort(g)
-print 'Topological Sort:', topo_sort
-
-# 3. Example with no dependencies (no edges in graph)
-print 'Example 3: no edges, any order should work'
-g = Graph()
-[g.add_vertex(i) for i in range(100)]
-topo_sort = topological_sort(g)
-print 'Topological Sort:', topo_sort

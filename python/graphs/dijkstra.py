@@ -1,139 +1,95 @@
-""" Dijkstra's algorithm for shortest path on general graph
-
-Dijkstra's only works with nonnegative weights.
-
-Bellman ford works for the general case.
-
-BFS works for shortest paths when weights are uniform (or small integers)
-
-""" 
-
-import heapq
-import random
-
-class Vertex(object):
-	def __init__(self, name, data):
-		self.name = name
-		self.data = data
-		self.adjacent = {}
-
-	def add_adjacent(self, other, weight):
-		self.adjacent[other] = weight
-
-class Graph(object):
-	def __init__(self):
-		self.vertices = {}
-
-	def add_vertex(self, name, data=None):
-		self.vertices[name] = Vertex(name, data)
-
-	def add_edge(self, u, v, weight, directed=False):
-		if not u in self.vertices:
-			self.add_vertex(u)
-		if not v in self.vertices:
-			self.add_vertex(v)
-
-		self.vertices[u].add_adjacent(v, weight)
-
-		if not directed:
-			self.vertices[v].add_adjacent(u, weight)
-
-	def print_graph(self):
-		print "Vertices:"
-		for v in self.vertices.keys():
-			print v, '->', self.vertices[v].adjacent
-
-	def get_vertex(self, v):
-		if v in self.vertices:
-			return self.vertices[v]
-		else:
-			return None
-
-class PriorityQueue(object):
-	def __init__(self, items=None):
-		if items == None:
-			self.queue = []
-		else:
-			self.queue = heapq.heapify(items)
-
-	def push(self, item):
-		heapq.heappush(self.queue, item)
-
-	def extract_min(self):
-		if len(self.queue) > 0:
-			return heapq.heappop(self.queue)
-		else:
-			return None
-
-	@property
-	def empty(self):
-		return len(self.queue) == 0
-
-def dijkstra_shortest_path(graph, start, goal=None):
-	"""
-	Runs Dijkstra's single source shortest path algorithm on a graph.
-	start: the name of the start vertex
-	goal: (optional) the name of the goal node. If given, the search
-	will terminate early when the goal node is found.
-	"""
-	distances = {} # Maintain distance of every vertex from start.
-	parents = {}
-	Queue = PriorityQueue()
-
-	# Initialize all distances to infinite distance (except start)
-	distances[start] = 0
-	parents[start] = None
-	for v in graph.vertices.keys():
-		if v != start:
-			distances[v] = float('inf')
-	Queue.push((distances[start], start))
-
-	finished = False
-	while (not Queue.empty and not finished):
-		dist, node_name = Queue.extract_min()
-		node = graph.get_vertex(node_name)
-
-		# Improve distance of neighboring nodes.
-		for adj_name in node.adjacent.keys():
-			# adj = graph.get_vertex(adj_name)
-			weight = node.adjacent[adj_name]
-			if (dist + weight) < distances[adj_name]:
-				# If relaxation can be made, update distances and parent pointers.
-				distances[adj_name] = dist + weight
-				parents[adj_name] = node.name
-				# Early stopping condition.
-				if (adj_name == goal): finished = True
-			Queue.push((distances[adj_name], adj_name))
-
-	return distances, parents
-
-def construct_path(start, goal, parents):
-	""" Trace parent pointers to reconstruct a path. """
-	node = goal
-	path = []
-	while (node in parents):
-		path.append(node)
-		if node == start: break
-		node = parents[node]
-
-	if path[-1] == start:
-		path.reverse()
-		return path
-	else:
-		return None
+import numpy as np
+from dataclasses import dataclass, field
+from heapq import heappush, heappop
 
 
-G = Graph()
-for i in range(10):
-	G.add_vertex(i)
+@dataclass
+class ShortestPath:
+  path: list[int]
+  distance: int | float
 
-for i in range(10):
-	for j in range(10):
-		G.add_edge(i, j, random.randint(0, 10))
 
-G.print_graph()
+@dataclass(order=True)
+class PNode:
+  priority: int | float
+  id: any = field(compare=False)
 
-dist, par = dijkstra_shortest_path(G, 1, goal=6)
-path = construct_path(1, 6, par)
-print path
 
+def dijkstra_shortest_path(W: np.ndarray, source: int, target: int) -> ShortestPath:
+  """Uses Dijkstra's Algorithm to compute a shortest path from `source` to `target`."""
+  frontier = [PNode(0, source)]
+  parents = {}
+  distances = {u: float('inf') for u in range(len(W)) if u != source}
+  distances[source] = 0
+  visited = set()
+
+  while len(frontier) > 0:
+    # Get the lowest-cost frontier node and expand it.
+    node_u = heappop(frontier)
+    u = node_u.id
+
+    # Because we push redundant nodes to the priority queue, we need to check
+    # if they've already been visited here.
+    if u in visited:
+      continue
+
+    visited.add(u)
+
+    # Terminate when we've reached the goal node.
+    if u == target:
+      break
+
+    neighbors = W[u].nonzero()[0]
+
+    for v in neighbors:
+      # Don't need to expand neighbors that have already been visited.
+      if v in visited:
+        continue
+
+      # See if we can improve the distance from source to v by going through u.
+      if (distances[u] + W[u, v]) < distances[v]:
+        distances[v] = distances[u] + W[u, v]
+        parents[v] = u
+
+        # Since heapq doesn't support a `decrease-key` like operation, we simply
+        # push the node with updated weight to the priority queue. The updated
+        # node will be expanded before the stale one, and then the stale one
+        # will be skipped later on as a duplicate.
+        heappush(frontier, PNode(distances[v], v))
+
+  # Failure if we never expanded the goal node.
+  if target not in parents:
+    return ShortestPath(path=[], distance=-1)
+
+  # Retrace the optimal path using parent pointers.
+  path = ShortestPath(path=[target], distance=0)
+
+  v = target
+  while v != source:
+    path.distance += W[parents[v], v]
+    v = parents[v]
+    path.path.append(v)
+
+  path.path.reverse()
+
+  return path
+
+
+if __name__ == "__main__":
+  num_vertices = 6
+
+  # Stores edge weights for edge (u, v)
+  W = np.zeros((num_vertices, num_vertices))
+
+  W[0, 1] = 1
+  W[0, 2] = 1
+  W[1, 3] = 1
+  W[2, 3] = 2
+  W[0, 3] = 3
+  W[3, 4] = 1
+  W[4, 5] = 1
+  W[3, 5] = 1
+
+  # Solution should be: 0, 1, 3, 5 with total distance 3
+  solution = dijkstra_shortest_path(W, 0, 5)
+  print(solution)
